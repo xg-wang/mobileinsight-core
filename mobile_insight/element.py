@@ -79,6 +79,11 @@ class Event(object):
         self.type_id = type_id
         self.data = data
 
+    def __str__(self):
+        print 'in __str__'
+        return ':'.join([str(self.timestamp),
+                str(self.type_id),
+                str(self.data)])
 
 class Element(object):
     '''The parent class to derive trace collectors and analyzers.
