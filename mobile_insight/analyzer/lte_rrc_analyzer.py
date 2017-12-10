@@ -916,6 +916,7 @@ class LteRrcAnalyzer(ProtocolAnalyzer):
                 drx_state['DRX state'] = "CRX"
                 drx_state['Timestamp'] = str(msg.timestamp)
                 self.broadcast_info('DRX',drx_state)
+                self.send_to_coordinator(Event(drx_state['Timestamp'], 'DRX', drx_state['DRX state']))
 
 
             if field.get('name') == "lte-rrc.rrcConnectionRelease_element":
@@ -928,6 +929,7 @@ class LteRrcAnalyzer(ProtocolAnalyzer):
                 drx_state['DRX state'] = "IDLE"
                 drx_state['Timestamp'] = str(msg.timestamp)
                 self.broadcast_info('DRX',drx_state)
+                self.send_to_coordinator(Event(drx_state['Timestamp'], 'DRX', drx_state['DRX state']))
 
 
     def set_source(self,source):
