@@ -8,9 +8,9 @@ Author: Yuanjie Li
         Zengwen Yuan
 """
 
-try: 
-    import xml.etree.cElementTree as ET 
-except ImportError: 
+try:
+    import xml.etree.cElementTree as ET
+except ImportError:
     import xml.etree.ElementTree as ET
 from analyzer import *
 from state_machine import *
@@ -23,10 +23,10 @@ from nas_util import *
 
 __all__=["LteNasAnalyzer"]
 
-#EMM registeration state 
+#EMM registeration state
 emm_state={0:"deregistered",1:"registered"}
 
-#EMM registeration substate 
+#EMM registeration substate
 emm_substate={
     0: "deregistered.normal_service",
     1: "deregistered.limited_service",
@@ -285,7 +285,9 @@ class LteNasAnalyzer(ProtocolAnalyzer):
             raw_msg = Event(msg.timestamp,msg.type_id,log_item_dict)
             self.__callback_emm_state(raw_msg)
             if self.emm_state_machine.update_state(raw_msg):
-                self.log_info("EMM state: " + str(self.emm_state_machine.get_current_state()))
+                emm_state = str(self.emm_state_machine.get_current_state())
+                self.log_info("EMM state: " + emm_state)
+                self.send_to_coordinator(Event(msg.timestamp, 'EMM', emm_state))
 
             self.send(msg)
 
@@ -295,7 +297,9 @@ class LteNasAnalyzer(ProtocolAnalyzer):
             raw_msg = Event(msg.timestamp,msg.type_id,log_item_dict)
             self.__callback_esm_state(raw_msg)
             if self.esm_state_machine.update_state(raw_msg):
-                self.log_info("ESM state: " + self.esm_state_machine.get_current_state())
+                esm_state = self.esm_state_machine.get_current_state()
+                self.log_info("ESM state: " + esm_state)
+                self.send_to_coordinator(Event(msg.timestamp, 'ESM', esm_state))
 
             self.send(msg)
 
