@@ -219,7 +219,7 @@ class LteRrcAnalyzer(ProtocolAnalyzer):
         log_item = msg.data.decode()
         log_item_dict = dict(log_item)
 
-        self.send_to_coordinator(Event(msg.timestamp, msg.type_id, str(log_item)))
+        self.send_to_coordinator(Event(log_item_dict['timestamp'], 'rrc', msg.type_id))
 
         # Calllbacks triggering
         if msg.type_id == "LTE_RRC_OTA_Packet":
