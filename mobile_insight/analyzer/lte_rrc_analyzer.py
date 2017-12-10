@@ -219,7 +219,7 @@ class LteRrcAnalyzer(ProtocolAnalyzer):
         log_item = msg.data.decode()
         log_item_dict = dict(log_item)
 
-        self.send_to_coordinator(Event(log_item_dict['timestamp'], 'rrc', msg.type_id))
+        self.send_to_coordinator(Event(log_item_dict['timestamp'], 'TYPE', msg.type_id))
 
         # Calllbacks triggering
         if msg.type_id == "LTE_RRC_OTA_Packet":
@@ -237,7 +237,7 @@ class LteRrcAnalyzer(ProtocolAnalyzer):
 
             if self.state_machine.update_state(xml_msg):
                 self.log_info("rrc state: " + str(self.state_machine.get_current_state()))
-                event = Event(msg.timestamp, 'rrc state', str(self.state_machine.get_current_state()))
+                event = Event(log_item_dict['timestamp'], 'RRC', str(self.state_machine.get_current_state()))
                 self.send_to_coordinator(event)
 
             tic = time.clock()
@@ -279,7 +279,7 @@ class LteRrcAnalyzer(ProtocolAnalyzer):
                 raw_msg = Event(' '.join(map(str, [log_item_dict['timestamp'], item['SFN'], item['Sub-FN']])), msg.type_id, item)
                 if self.state_machine.update_state(raw_msg):
                     self.log_info("rrc state: " + str(self.state_machine.get_current_state()))
-                    event = Event(msg.timestamp, 'rrc state', str(self.state_machine.get_current_state()))
+                    event = Event(log_item_dict['timestamp'], 'RRC', str(self.state_machine.get_current_state()))
                     self.send_to_coordinator(event)
                     # self.log_info("rrc state history: " + str(self.state_machine.state_history))
             self.__callback_drx(log_item_dict)
