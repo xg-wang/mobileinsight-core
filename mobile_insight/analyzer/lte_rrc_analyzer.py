@@ -219,7 +219,7 @@ class LteRrcAnalyzer(ProtocolAnalyzer):
         log_item = msg.data.decode()
         log_item_dict = dict(log_item)
 
-        self.send_to_coordinator(Event(log_item_dict['timestamp'], 'TYPE', msg.type_id))
+        self.send_to_coordinator(Event(msg.timestamp, 'TYPE', msg.type_id))
 
         # Calllbacks triggering
         if msg.type_id == "LTE_RRC_OTA_Packet":
@@ -358,12 +358,12 @@ class LteRrcAnalyzer(ProtocolAnalyzer):
                     if val.get('name') == 'lte-rrc.rsrpResult':
                         meas_report['rsrp'] = int(val.get('show'))
                         meas_report['rssi'] = meas_report['rsrp'] - 141 # map rsrp to rssi
+                        self.send_to_coordinator(msg.timestamp, 'rsrp', meas_report['rsrp'])
                     elif val.get('name') == 'lte-rrc.rsrqResult':
                         meas_report['rsrq'] = int(val.get('show'))
+                        self.send_to_coordinator(msg.timestamp, 'rsrq', meas_report['rsrq'])
                 self.broadcast_info('MEAR_PCELL', meas_report)
                 self.log_info('MEAR_PCELL: ' + str(meas_report))
-                self.send_to_coordinator(msg.timestamp, 'rsrp', meas_report['rsrp'])
-                self.send_to_coordinator(msg.timestamp, 'rsrq', meas_report['rsrq'])
 
             #TODO: use MIB, not lte-rrc.trackingAreaCode
             if field.get('name') == "lte-rrc.trackingAreaCode": #tracking area code
