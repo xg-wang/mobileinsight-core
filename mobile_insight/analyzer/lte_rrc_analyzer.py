@@ -306,6 +306,7 @@ class LteRrcAnalyzer(ProtocolAnalyzer):
             elif item['CDRX Event'] == "SHORT_CYCLE_START":
                 drx_state['DRX state'] = "SHORT_DRX"
                 self.broadcast_info('DRX',drx_state)
+        self.send_to_coordinator(Event(drx_state['Timestamp'], 'DRX', drx_state['DRX state']))
 
 
     def __callback_serv_cell(self,msg):
