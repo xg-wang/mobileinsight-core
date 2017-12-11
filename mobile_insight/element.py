@@ -80,8 +80,7 @@ class Event(object):
         self.data = data
 
     def __str__(self):
-        print 'in __str__'
-        return ':'.join([str(self.timestamp),
+        return '\t'.join([str(self.timestamp),
                 str(self.type_id),
                 str(self.data)])
 
