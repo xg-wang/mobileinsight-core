@@ -358,11 +358,11 @@ class LteRrcAnalyzer(ProtocolAnalyzer):
                     if val.get('name') == 'lte-rrc.rsrpResult':
                         meas_report['rsrp'] = int(val.get('show'))
                         meas_report['rssi'] = meas_report['rsrp'] - 141 # map rsrp to rssi
-                        self.send_to_coordinator(msg.timestamp, 'rsrp', meas_report['rsrp'])
+                        self.send_to_coordinator(Event(msg.timestamp, 'rsrp', meas_report['rsrp']))
                     elif val.get('name') == 'lte-rrc.rsrqResult':
                         meas_report['rsrq'] = int(val.get('show'))
-                        self.send_to_coordinator(msg.timestamp, 'rsrq', meas_report['rsrq'])
-                self.broadcast_info('MEAR_PCELL', meas_report)
+                        self.send_to_coordinator(Event(msg.timestamp, 'rsrq', meas_report['rsrq']))
+                # self.broadcast_info('MEAR_PCELL', meas_report)
                 self.log_info('MEAR_PCELL: ' + str(meas_report))
 
             #TODO: use MIB, not lte-rrc.trackingAreaCode
